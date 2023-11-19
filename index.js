@@ -20,5 +20,5 @@ app.use("/api/library",require("./routes/LibraryRoutes")),
 app.use("/api/sendmessage",require("./routes/sendMessages"));
 
 app.listen(port,"0.0.0.0",()=>{
-    console.log("server is live at 5000");  
+    console.log("server is live at 3000");  
 });
