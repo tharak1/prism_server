@@ -76,7 +76,7 @@ app.use("/api/hostels",require("./hostels/routes/hostelsRoutes"));
 // app.use('/booksPdf',express.static('./upload/booksPdf'));
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.send("Hello This is prism server");
 });
 
 httpServer.listen(port,"0.0.0.0",()=>{
