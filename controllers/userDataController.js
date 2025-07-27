@@ -4,6 +4,7 @@ const jwt=require("jsonwebtoken");
 const Faculty = require("../models/facultyModel");
 
 const getUserData = asyncHandler(async(req,res)=>{
+    
     const currentUser = await UserData.findOne({RollNo : req.user.roolno});
     res.json(currentUser);
 });
@@ -21,7 +22,6 @@ const getAllUsersDataAsSection = asyncHandler(async(req,res)=>{
     }
 
     const currentUsers = await UserData.find(filter,{'RollNo':1,'StudentName':1,'_id':0});
-    console.log(filter);
     res.json(currentUsers);
 });
 
@@ -46,7 +46,6 @@ const getStudentsDataFORchat = asyncHandler(async(req,res)=>{
             }
             result.push(sai);
         });
-        // console.log(changed);
     }
 
     res.json(result);
@@ -73,7 +72,6 @@ const getParentsForChat = asyncHandler(async(req,res)=>{
             }
             result.push(sai);
         });
-        // console.log(changed);
     }
 
     res.json(result);
@@ -101,7 +99,6 @@ const getFacultyForChat = asyncHandler(async(req,res)=>{
             }
             result.push(sai);
         });
-        // console.log(changed);
     }
     res.json(result);
 });
@@ -129,7 +126,6 @@ const getFacultyStudentForChat = asyncHandler(async(req,res)=>{
             }
             result.push(sai);
         });
-        // console.log(changed);
     res.json(result);
 });
 
@@ -160,14 +156,12 @@ const validateUser = asyncHandler(async(req,res)=>{
 
 
 const loginUser = asyncHandler(async (req,res) =>{
-    const {UserName,Password} = req.body;
-    console.log(req.body);
-    if(!UserName || !Password){
-        res.status(400).json({error:"all fields are manditory"});
+    const {userName,password} = req.body;
+    if(!userName || !password){
+        return res.status(400).json({error:"all fields are manditory"});
     }
-    const user = await UserData.findOne({UserName});   
-    console.log(user) 
-    if(user && (user.Password===Password)){
+    const user = await UserData.findOne({RollNo: userName});   
+    if(user && (user.Password===password)){
             const accessToken = jwt.sign(
                 {
                     user : {
@@ -176,10 +170,10 @@ const loginUser = asyncHandler(async (req,res) =>{
                     }
                 },
                 process.env.ACCESS_TOKEN_SECERT,
-            );
-            res.json({token:accessToken});
+            );            
+           return res.json({token:accessToken});
     }else{
-        res.status(400).json({error:"user not found or roolno or password dont match"});
+       return res.status(400).json({error:"user not found or roolno or password dont match"});
     }
     
 });
@@ -189,12 +183,8 @@ const loginUser = asyncHandler(async (req,res) =>{
 const manageNewData = asyncHandler(async(req,res)=>{
     let count = 0;
     const newUsers = await UserData.find();
-    // console.log(newUsers);
-    // console.log(newUsers);
     
     newUsers.forEach(async(obj)=>{
-        // console.log(obj.FatherName);
-
 
         obj.ImageUrl = `https://mrecadmissions.com/Images/Students/${obj.RollNo}.jpg?v=20231207193652`;
 
@@ -210,7 +200,6 @@ const manageNewData = asyncHandler(async(req,res)=>{
         count = count+1;
     });
 
-    console.log(count);
 });
 
 // manageNewData();

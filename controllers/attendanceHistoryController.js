@@ -152,10 +152,12 @@ const getAttendanceByHistories = asyncHandler(async (req, res) => {
 
     // Filter entries in TimeTable array until today's date
     const attendanceData = timeTableData.filter(entry => new Date(entry.date) <= currentDate)
-                                         .map(entry => ({
-                                           date: entry.date,
-                                           PresentStatus: entry.PresentStatus
-                                         }));
+      .map(entry => {                                          
+      return{
+        date: entry.date,
+        presentStatus: entry.PresentStatus ?? 0
+      }
+    });
 
     res.status(200).json(attendanceData );
   } else {

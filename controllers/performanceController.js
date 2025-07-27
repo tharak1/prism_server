@@ -8,10 +8,22 @@ const createPerformance = asyncHandler(async(req,res)=>{
     res.status(200).json(per);
 });
 
-const getPerformance = asyncHandler(async(req,res)=>{
-    const userPer = await Performance.findOne({RollNo:req.user.roolno});
-    res.status(200).json(userPer);
+const getPerformance = asyncHandler(async (req, res) => {
+    try {        
+        if (!req.user || !req.user.roolno) {
+            return res.status(400).json({ error: "User information is missing or incomplete." });
+        }
+        const userPer = await Performance.findOne({ RollNo: req.user.roolno });
+
+        if (!userPer) {
+            return res.status(404).json({ error: "Performance record not found." });
+        }
+        res.status(200).json(userPer);
+    } catch (error) {
+        res.status(500).json({ error: "Server error while retrieving performance." });
+    }
 });
+
 
 
 
